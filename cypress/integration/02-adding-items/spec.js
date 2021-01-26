@@ -1,7 +1,11 @@
 /// <reference types="cypress" />
+import { addItem } from '../../support/utils'
+beforeEach(() => {
+  cy.visit('/')
+})
+
 it('loads', () => {
   // application should be running at port 3000
-  cy.visit('localhost:3000')
   cy.contains('h1', 'todos')
 })
 
@@ -10,15 +14,27 @@ it('loads', () => {
 // IMPORTANT ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 it('adds two items', () => {
-  // repeat twice
-  //    get the input field
-  //    type text and "enter"
-  //    assert that the new Todo item
-  //    has been added added to the list
-  // cy.get(...).should('have.length', 2)
+  addItem('first todo')
+  addItem('second todo')
+  cy.get('li.todo').should('have.length', 2)
 })
 
 it('can mark an item as completed', () => {
+  addItem('first todo')
+  addItem('second todo')
+  cy.get('li.todo')
+    .should('have.length', 2)
+    .first()
+    .find('.toggle')
+    .click()
+  cy.get('li.todo')
+    .should('have.length', 2)
+    .first()
+    .should('have.class', 'completed')
+  cy.get('li.todo')
+    .should('have.length', 2)
+    .eq(1)
+    .should('not.have.class', 'completed')
   // adds a few items
   // marks the first item as completed
   // confirms the first item has the expected completed class
@@ -26,6 +42,18 @@ it('can mark an item as completed', () => {
 })
 
 it('can delete an item', () => {
+  addItem('first todo')
+  addItem('second todo')
+  cy.get('li.todo')
+    .should('have.length', 2)
+    .first()
+    .find('button.destroy')
+    .click({ force: true })
+  cy.get('li.todo').should('have.length', 1)
+  cy.contains('li.todo', 'first todo').should('not.exist')
+  cy.contains('li.todo', 'second todo')
+  cy.reload()
+  cy.get('li.todo').should('have.length', 1)
   // adds a few items
   // deletes the first item
   // use force: true because we don't want to hover
@@ -36,9 +64,11 @@ it('can delete an item', () => {
 it('can add many items', () => {
   const N = 5
   for (let k = 0; k < N; k += 1) {
+    addItem(`todo ${k + 1}`)
     // add an item
     // probably want to have a reusable function to add an item!
   }
+  cy.get('li.todo').should('have.length', N)
   // check number of items
 })
 

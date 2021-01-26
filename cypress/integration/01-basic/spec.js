@@ -10,8 +10,8 @@ it('loads', () => {
 
   // this assertion fails on purpose
   // can you fix it?
-  // https://on.cypress.io/get
-  cy.contains('h1', 'Todos App')
+  // https://on.cypress.io/contains
+  cy.contains('h1', 'todos')
 
   // can you write "cy.contains" using regular expression?
   // cy.contains('h1', /.../)

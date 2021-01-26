@@ -111,7 +111,9 @@ export const enterTodo = (text = 'example todo') => {
   const lastItem = '.todoapp .todo-list li:last'
   cy.get(lastItem).should('contain', text)
 }
-
+export const addItem = text => {
+  cy.get('input.new-todo').type(`${text}{enter}`)
+}
 // a couple of aliases for 12-custom-commands answers
 export const resetData = resetDatabase
 export const visitSite = () => visit(true)
